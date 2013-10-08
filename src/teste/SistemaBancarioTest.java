@@ -1,12 +1,6 @@
 package teste;
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 import junit.framework.Assert;
-
 import negocio.Cliente;
 import negocio.Conta;
 import negocio.ContaCorrenteEspecial;

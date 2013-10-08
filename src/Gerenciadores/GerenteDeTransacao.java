@@ -11,9 +11,7 @@ import persistencia.TransacaoPersist;
 public class GerenteDeTransacao {
 
 	private ArrayList<Transacao> transacoes = new ArrayList<Transacao>();;
-	//private HashMap<Integer, List<Transacao>> map = new HashMap<Integer, List<Transacao>>();
 	private ArrayList<Transacao> listAux= new ArrayList<Transacao>();
-	private HashMap<Integer, List<Transacao>> mapAux = new HashMap<Integer, List<Transacao>>();
 	private TransacaoPersist tp = new TransacaoPersist();
 
 
