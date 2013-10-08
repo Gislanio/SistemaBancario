@@ -9,8 +9,8 @@ import java.util.Date;
 import negocio.Conta;
 import excecao.ContaException;
 import persistencia.ContaPersist;
-import negocio.ContaPoupanca;
 import negocio.ContaCorrenteEspecial;
+import negocio.ContaPoupanca;
 
 
 
@@ -40,14 +40,12 @@ public class GerenteDeContas {
 		}
 	}
 
-	/*public void atualizarConta(Conta c){
-		if(buscarConta(c.getNumero()) != null){
-			Conta aux = buscarConta(c.getNumero());
-
-		}
-	}*/
+	
 
 	public void removerConta(Conta c){
+		if(verificarConta(c.getNumero(), c.getSenha()) == false){
+			throw new ContaException("Conta Não Localizada!");
+		}
 		contas.remove(c);
 		atualizarPersistencia();
 
@@ -82,19 +80,88 @@ public class GerenteDeContas {
 	}
 
 	public void sacar(Conta conta, double valor){
+		if(conta instanceof ContaCorrenteEspecial){
+			
+		}
 		if(verificarConta(conta.getNumero(), conta.getSenha()) == false || conta.isAtiva()==false || valor > conta.getSaldo()){
+			throw new ContaException(
+					"Algum dado inserido é invalido!");
+		}
+
+		
+		for(Conta i: contas){
+			if(i.getSenha() == conta.getSenha() ){
+				i.setSaldo(i.getSaldo()-valor);
+				atualizarPersistencia();
+			}
+		}
+	}
+	
+	public void sacarContaEspecial(ContaCorrenteEspecial conta, double valor){
+		if(verificarConta(conta.getNumero(), conta.getSenha()) == false  || valor > conta.getSaldo()+conta.getLimitePadrao() || valor <0){
 			throw new ContaException(
 					"Algum dado inserido é invalido!");
 		}
 
 		for(Conta i: contas){
 			if(i.getSenha() == conta.getSenha()){
+					
+				while(valor>0){
+					if(i.getSaldo() >0){
+						i.setSaldo(i.getSaldo()-1);
+						valor--;
+						
+					}
+					if(i.getSaldo()==0 && ((ContaCorrenteEspecial) i).getValorLimiteAtual() >0){
+						((ContaCorrenteEspecial) i).setValorLimiteAtual(((ContaCorrenteEspecial) i).getValorLimiteAtual()-1);
+						valor--;
+					}
+					
+					
+				}
+				
+				atualizarPersistencia();
+			}
+		}
+
+		
+		for(Conta i: contas){
+			if(i.getSenha() == conta.getSenha() || i instanceof ContaCorrenteEspecial){
 				i.setSaldo(i.getSaldo()-valor);
 				atualizarPersistencia();
 			}
 		}
 	}
 
+	
+	public void depositarContaEspecial(ContaCorrenteEspecial conta, double valor){
+		if(verificarConta(conta.getNumero(), conta.getSenha()) == false || valor <0 ){
+			throw new ContaException(
+					"Algum dado inserido é invalido!");
+		}
+
+		for(Conta i: contas){
+			if(i.getSenha() == conta.getSenha()){
+				ContaCorrenteEspecial j = (ContaCorrenteEspecial) i;
+				while(valor>0){
+					
+					if(j.getValorLimiteAtual()!= j.getLimitePadrao()){
+						j.setValorLimiteAtual(j.getValorLimiteAtual()+1);
+						valor--;
+						
+					}
+					if(j.getLimitePadrao()==j.getValorLimiteAtual()){
+						j.setSaldo(j.getSaldo()+1);
+						valor--;
+					}
+					
+					
+				}
+				
+				atualizarPersistencia();
+			}
+		}
+	}
 	public void desativarConta(Conta conta){
 
 		for(Conta i: contas){
@@ -120,6 +187,9 @@ public class GerenteDeContas {
 		for(Conta i: contas){
 			if(i.getNumero()==numero && i.getSenha()==senha){
 				return true;
+			}
+			if(i.isAtiva() == false){
+				return false;
 			}
 		}
 		return false;

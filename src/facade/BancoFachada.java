@@ -6,6 +6,7 @@ import java.util.List;
 
 import negocio.Cliente;
 import negocio.Conta;
+import negocio.ContaCorrenteEspecial;
 import negocio.ContaPoupanca;
 import negocio.TipoOperacao;
 import negocio.Transacao;
@@ -82,11 +83,19 @@ public class BancoFachada {
 	public double calcularRendimentoEmMeses(ContaPoupanca c, double taxa, int meses){
 		return g_conta.calcularRendimentoEmMeses(c, taxa, meses);
 	}
+	
+	public void sacarContaEspecial(ContaCorrenteEspecial conta, double valor){
+		g_conta.sacarContaEspecial(conta, valor);
+	}
+	
+	public void depositarContaEspecial(ContaCorrenteEspecial conta, double valor){
+		g_conta.depositarContaEspecial(conta, valor);
+	}
 	//Operações com Transações
 	
 	public void tranferir( Conta contaOrig, double valor, Conta contaDest){
 		g_conta.transferirSaldo(contaOrig, valor, contaDest);
-	}
+	}	
 	
 	public void criarTransacao(Transacao t){
 		g_transacao.addTransacao(t);
@@ -107,10 +116,6 @@ public class BancoFachada {
 		return g_transacao.extrato(conta);
 	}
 	
-	/*public boolean adicionarTransacao(Transacao transacao){
-		return g_transacao.AdicionarTransacao(transacao);
-	}
-	*/
 	public List<Transacao> verTransacoesPorConta(Conta conta){
 		return g_transacao.verTransacoesPorConta(conta);
 	}
