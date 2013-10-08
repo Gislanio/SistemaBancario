@@ -449,6 +449,9 @@ public class SistemaBancarioTest {
 
 	}
 
+	public void testarPersistencia(){
+		
+	}
 
 
 
