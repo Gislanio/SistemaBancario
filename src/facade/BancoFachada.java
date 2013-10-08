@@ -1,5 +1,9 @@
 package facade;
 
+import gerenciadores.GerenteCliente;
+import gerenciadores.GerenteDeContas;
+import gerenciadores.GerenteDeTransacao;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,9 +14,6 @@ import negocio.ContaPoupanca;
 import negocio.TipoOperacao;
 import negocio.Transacao;
 
-import Gerenciadores.GerenteCliente;
-import Gerenciadores.GerenteDeContas;
-import Gerenciadores.GerenteDeTransacao;
 
 
 public class BancoFachada {
