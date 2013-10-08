@@ -1,5 +1,8 @@
 package teste;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import junit.framework.Assert;
 import negocio.Cliente;
 import negocio.Conta;
@@ -443,8 +446,30 @@ public class SistemaBancarioTest {
 
 	}
 
+	@Test
 	public void testarPersistencia(){
+		Cliente c = new Cliente("Ana Maria", "00900800709", 7654908, "Rua: Antonio Silveira - MS/PA");
+		banco.adicionarCliente(c);
+		Conta conta1 = new Conta (c,9876,98765);
+		banco.criarConta(conta1);
+		Transacao t = new Transacao(conta1, TipoOperacao.ABERTURA);
+		banco.criarTransacao(t);
+
+		banco.depositar(conta1, 100.00);
+		t.setOperacao(TipoOperacao.DEPOSITO);
+
+		Cliente c1 = new Cliente("Antonio Soares", "87253800709", 9874908, "Rua: Antonio Silveira - MS/PA");
+		banco.adicionarCliente(c1);
+		Conta conta2 = new Conta (c1,8765,12365);
+		banco.criarConta(conta2);
+		Transacao t1 = new Transacao(conta2, TipoOperacao.ABERTURA);
+		banco.criarTransacao(t1);
 		
+		BancoFachada f2 = new BancoFachada();
+		List<Cliente> clientes = f2.recuperarAllClientes();
+		Assert.assertEquals(c.getCpf(), f2.recuperarCliente(c).getCpf());
+
+
 	}
 
 
